@@ -136,21 +136,25 @@ func runWar(hands []cards.Deck) WarReport {
 	}
 }
 
-/// RunGame simulates an entire game of wars and returns a report detailing
-/// what happened in each war.
-func RunGame() []WarReport {
+/// StartGame simulates an entire game of wars and returns a series of reports
+/// detailing what happened in each war.
+func StartGame() <-chan WarReport {
 	fullDeck := cards.NewDeck()
 	fullDeck.Shuffle()
 	hands := fullDeck.Split()
 
-	var war WarReport
-	war = runWar(hands[:])
-	report := []WarReport{war}
+    reports := make(chan WarReport)
+    go func() {
+        for {
+            war := runWar(hands[:])
+            reports <- war
 
-	for !war.EndsGame {
-		war = runWar(hands[:])
-		report = append(report, war)
-	}
+            if war.EndsGame {
+                close(reports)
+                return
+            }
+        }
+    }()
 
-	return report
+	return reports
 }

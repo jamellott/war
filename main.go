@@ -12,13 +12,14 @@ func main() {
     fmt.Scanf("%v\n", &seed)
 	rand.Seed(seed)
 
-	DisplayGame(game.RunGame())
+	DisplayGame(game.StartGame())
 }
 
-func DisplayGame(report []game.WarReport) {
-	for warIndex := range report {
-		fmt.Printf("\n\nWar %v\n==========\n", warIndex+1)
-		war := &report[warIndex]
+func DisplayGame(reports <-chan game.WarReport) {
+    var warIndex int
+	for war := range reports {
+        warIndex += 1
+		fmt.Printf("\n\nWar %v\n==========\n", warIndex)
 
 		for battleIndex := range war.Battles {
 			fmt.Printf("\nBattle %v\n----------\n", battleIndex+1)

@@ -80,3 +80,28 @@ func TestCompare(t *testing.T) {
 		}
 	}
 }
+
+// TestSplit calls cards.Deck.Split() and ensures that the two returned
+// decks are of equal size.
+func TestSplit(t *testing.T) {
+	d := NewDeck()
+
+	size := d.Len()
+	decks := d.Split()
+	if decks[0].Len() != size/2 && decks[1].Len() != size/2 {
+		t.Fatalf("Expected decks to be split in half. Expected: 52,26,26 actual %v,%v,%v", size, decks[0].Len(), decks[1].Len())
+	}
+}
+
+// TestDeal calls cards.Deck.Deal() and ensures that the number of cards
+// in the deck are decremented.
+func TestDeal(t *testing.T) {
+	d := NewDeck()
+
+	size := d.Len()
+	_ = d.Deal()
+
+	if d.Len() != size-1 {
+		t.Fatalf("Expected deck size %v, actual %v", size-1, size)
+	}
+}

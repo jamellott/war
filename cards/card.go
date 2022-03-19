@@ -22,28 +22,34 @@ const (
 	Diamonds
 	Spades
 	Hearts
+
+	firstSuit = int(Clubs)
+	suitCount = 4
 )
 
 const (
-	Jack  Value = 11
-	Queen       = 12
-	King        = 13
-	Ace         = 14
+	Jack Value = 11 + iota
+	Queen
+	King
+	Ace
+
+	firstValue = 2
+	valueCount = 13
 
 	// helper constant, rounded up to power of 2
-	cardsPerSuit = 16
+	suitModulo = 16
 )
 
 func NewCard(val Value, suit Suit) Card {
-	return Card(uint8(val) + uint8(suit)*cardsPerSuit)
+	return Card(uint8(val) + uint8(suit)*suitModulo)
 }
 
 func (c Card) Value() Value {
-	return Value(c % cardsPerSuit)
+	return Value(c % suitModulo)
 }
 
 func (c Card) Suit() Suit {
-	return Suit(c / cardsPerSuit)
+	return Suit(c / suitModulo)
 }
 
 func (v Value) Name() string {

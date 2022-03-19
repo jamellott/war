@@ -21,6 +21,13 @@ func NewDeck() *Deck {
 	}
 }
 
+/// Returns a new deck with the given sequence of cards
+func NewDeckFromCards(cards []Card) *Deck {
+	return &Deck{
+		cards,
+	}
+}
+
 /// Split splits a deck evenly into two half sized decks. Panics if Len()
 /// is not even.
 func (d *Deck) Split() [2]Deck {

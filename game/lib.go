@@ -144,21 +144,21 @@ func StartGame(maxWars int) <-chan WarReport {
 	fullDeck.Shuffle()
 	hands := fullDeck.Split()
 
-    reports := make(chan WarReport)
-    warIndex := 0
-    go func() {
-        for {
-            war := runWar(hands[:])
-            reports <- war
+	reports := make(chan WarReport)
+	warIndex := 0
+	go func() {
+		for {
+			war := runWar(hands[:])
+			reports <- war
 
-            warIndex += 1
+			warIndex += 1
 
-            if war.EndsGame || warIndex >= maxWars {
-                close(reports)
-                return
-            }
-        }
-    }()
+			if war.EndsGame || warIndex >= maxWars {
+				close(reports)
+				return
+			}
+		}
+	}()
 
 	return reports
 }

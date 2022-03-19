@@ -6,19 +6,22 @@ import (
 	"math/rand"
 )
 
+const maxWars = 1 << 16
+
 func main() {
-    var seed int64
-    fmt.Printf("Enter game seed: ")
-    fmt.Scanf("%v\n", &seed)
+	var seed int64
+	fmt.Printf("Enter game seed: ")
+	fmt.Scanf("%v\n", &seed)
 	rand.Seed(seed)
 
-	DisplayGame(game.StartGame())
+	DisplayGame(maxWars, game.StartGame(maxWars))
 }
 
-func DisplayGame(reports <-chan game.WarReport) {
-    var warIndex int
+/// DisplayGame displays a game as its reports are sent to the passed channel.
+func DisplayGame(maxWars int, reports <-chan game.WarReport) {
+	var warIndex int
 	for war := range reports {
-        warIndex += 1
+		warIndex += 1
 		fmt.Printf("\n\nWar %v\n==========\n", warIndex)
 
 		for battleIndex := range war.Battles {

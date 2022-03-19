@@ -137,19 +137,23 @@ func runWar(hands []cards.Deck) WarReport {
 }
 
 /// StartGame simulates an entire game of wars and returns a series of reports
-/// detailing what happened in each war.
-func StartGame() <-chan WarReport {
+/// detailing what happened in each war. After the first war report where
+/// EndsGame is true, the channel is closed.
+func StartGame(maxWars int) <-chan WarReport {
 	fullDeck := cards.NewDeck()
 	fullDeck.Shuffle()
 	hands := fullDeck.Split()
 
     reports := make(chan WarReport)
+    warIndex := 0
     go func() {
         for {
             war := runWar(hands[:])
             reports <- war
 
-            if war.EndsGame {
+            warIndex += 1
+
+            if war.EndsGame || warIndex >= maxWars {
                 close(reports)
                 return
             }
